@@ -3,28 +3,81 @@
 "use strict";
 
 const assert = require( 'assert' )
-  , express = require( 'express' )
-  , app = express()
-  , git = require( './git' )
+  , http = require( 'http' )
+  , url = require( 'url' )
   , path = require( 'path' )
-  , tmp = require( 'tmp' );
+  , fs = require( 'fs' )
+  , Session = require( './session' )
+  , NPM = require( './npm' );
 
-app
-.get( '/build-bot/*', (req, res) => {
+fs.readFile( path.join( __dirname, '../config.json' ), (err, data) => {
 
-	assert( req.params.length != 0 );
+  if (err) {
+    console.log( 'error loading config file: ', err );
+    return;
+  }
 
-	const repo = req.params[0];
-	
-	tmp.dir( { unsafeCleanup: true }, (err, tempDir, cleanupCallback) => {
-		if (err) throw err;
-		git.cloneRepo( repo, path.join( tempDir ) )
-		.then( () => {
-			cleanupCallback();
-			res.send( 'done' );
-		});
-	});
-})
-.listen( '3000', () => {
-	console.log( 'listening' );
+  const config = JSON.parse( data );
+  listen( new Session( config ), config.port);
 });
+
+function listen( session, port = '3000' ) {
+
+  http.createServer( (req, res) => {
+
+    if (req.url === '/favicon.ico') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    const pathParams = url.parse( req.url, true ).pathname.split( '/' ).slice( 1 );
+
+    assert( pathParams.length != 0 );
+
+    const repoName = pathParams[0]
+      , ref = pathParams.slice(1).join( '/' )
+      , sha = ref.length == 40 ? ref : '';
+
+    session.createStatus( repoName, sha, 'pending' );
+
+    runTest()
+    .then( testResult => {
+      session.createStatus( repoName, sha, testResult.state );
+      res.writeHead( testResult.code );
+      delete testResult.code;
+      res.end( JSON.stringify(testResult) );
+    })
+    .catch( err => {
+      console.log( err );
+      res.writeHead( 500 );
+      res.end( JSON.stringify( {error: err} ) );
+    });
+
+    function runTest() {
+      return new Promise( (resolve, reject) => {
+        session.pullRemoteRepo( repoName, ref )
+        .then( repo => {
+          
+          NPM
+          .installAndTest(repo.path)
+          .then( onTestFinished.bind( null, { state: 'success', code: 200 } ) )
+          .catch( err => {
+            onTestFinished( { state: 'failure', error: err, code: 201 } );
+          });
+          
+          function onTestFinished( testResult ) {
+            repo.cleanup(); 
+            resolve( testResult );
+          }
+        })
+        .catch( err => {
+          resolve( { error: err, code: 404 } );
+        });
+      });
+    }
+  })
+  .listen( port, () => {
+    console.log( 'test-bot listening on port', port );
+  });
+}

@@ -1,0 +1,19 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "description": "nodejs test service",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "tape test/test.js"
+  },
+  "author": "mark busenitz",
+  "license": "MIT",
+  "dependencies": {
+    "tmp": "*",
+    "github": "*"
+  },
+  "devDependencies": {
+    "tape": "*"
+  },
+  "keywords": [ "test-automation", "continuous-integration" ]
+}

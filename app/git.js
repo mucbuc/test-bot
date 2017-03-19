@@ -2,37 +2,45 @@
 
 'use strict';
 
-const path = require( 'path' )
-  , user = 'mucbuc'
-  , cp = require( 'child_process' );
+const base = require( './base' )
+  , tmp = require( 'tmp' )
+  , Repo = require( './repo' );
 
-function cloneRepo(repoName, repoPath)
-{	
-	console.log( arguments );
-	return new Promise( (resolve, reject) => {
-		const url = 'https://github.com/' + path.join( user, repoName ) + '.git';
-		
-		console.log( 'git clone ' + url + ' ' + repoPath );
+function pullRepo(url, ref = '') {
 
-		cp.exec( 'git clone ' + url + ' ' + repoPath, (error, stdout, stderr) => {
-			if (error) throw error;
-			process.stdout.write( stdout );
-			process.stderr.write( stderr );
-			resolve();
-		});
-	});
+  return new Promise( (resolve, reject) => {
+    tmp.dir( { unsafeCleanup: true }, (err, tempDir, cleanupCallback) => {
+      
+      if (err) throw err;
+     
+      git( ['init'] )
+      .then( git.bind( null, [ 'pull', url ] ) )
+      .then( gitCheckout )
+      .then( () => {
+        resolve( new Repo( { path : tempDir, cleanup : cleanupCallback } ) );
+      })
+      .catch( reject );    
+      
+      function git(args) {
+          
+        console.log( 'git', args );
+
+        return base.spawn( 'git', args, { cwd: tempDir } );
+      }
+
+      function gitCheckout() {
+        if (ref.length) {
+          return git( ['checkout', ref] );
+        }
+        else return new Promise( resolve => {
+          resolve();
+        });
+      }
+
+    });
+  });
 }
 
 module.exports = {
-	cloneRepo: cloneRepo
+  pullRepo: pullRepo
 };
-
-function spawn(cmd, args) {
-	return new Promise( (resolve, reject) => {
-		cp.spawn( cmd, args, { stdio: 'inherit' } )
-		.on( 'close', resolve )
-		.on( 'error', reject );
-	});
-}
-
-//cloneRepo( 'kb', './tmp' );
