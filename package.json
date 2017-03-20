@@ -1,6 +1,6 @@
 {
   "name": "test-bot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "nodejs test service",
   "main": "app/index.js",
   "scripts": {
@@ -16,5 +16,11 @@
   "devDependencies": {
     "tape": "*"
   },
-  "keywords": [ "test-automation", "continuous-integration" ]
+  "keywords": [ "test-automation", "continuous-integration" ],
+  "bin": "./app/index.js",
+  "preferGlobal": "true",
+  "repository": {
+    "type": "git",
+    "url": "https:///github.com/mucbuc/test-bot.git"
+  }
 }

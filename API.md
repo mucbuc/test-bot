@@ -10,12 +10,12 @@
 
 *  **URL params**   
   *Required:*  
-  `repo=[string]`
-  example: repo='test-bot'  
-  `ref=[string]`
-  example: ref='refs/heads/dev' 
-  `commit=[string]`  
-  example: commit='edc2316e1bebf03e2ecc294780923a54566464b1'
+    - `repo=[string]`  
+      example: repo='test-bot'   
+    - `ref=[string]`  
+      example: ref='refs/heads/dev'  
+    - `commit=[string]`   
+      example: commit='edc2316e1bebf03e2ecc294780923a54566464b1'  
 
 *  **success response**  
     - code: 200 Success  
@@ -30,4 +30,5 @@
       content: `{"error": <no clue??>}`  
 
 * **sample call**  
-  `curl -L http://who.com/expector/master`
+  `curl -L http://who.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`
+  => `{"state":"success"}`
