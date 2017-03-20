@@ -8,9 +8,21 @@ const assert = require( 'assert' )
   , path = require( 'path' )
   , fs = require( 'fs' )
   , Session = require( './session' )
-  , NPM = require( './npm' );
+  , NPM = require( './npm' )
+  , program = require( 'commander' );
 
-fs.readFile( path.join( __dirname, '../config.json' ), (err, data) => {
+program
+.version('0.0.1')
+.usage( '<file>' )
+.parse( process.argv );
+
+if (!program.args.length)
+{
+  console.log( "error: no configuration file specified" );
+  return
+}
+
+fs.readFile( program.args[0], (err, data) => {
 
   if (err) {
     console.log( 'error loading config file: ', err );
