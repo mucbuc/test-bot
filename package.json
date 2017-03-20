@@ -16,5 +16,11 @@
   "devDependencies": {
     "tape": "*"
   },
-  "keywords": [ "test-automation", "continuous-integration" ]
+  "keywords": [ "test-automation", "continuous-integration" ],
+  "bin": "./app/index.js",
+  "preferGlobal": "true",
+  "repository": {
+    "type": "git",
+    "url": "https:///github.com/mucbuc/test-bot.git"
+  }
 }

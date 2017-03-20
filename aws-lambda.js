@@ -1,3 +1,8 @@
+/* 
+	Example of aws-lambda kicking off unit tests triggered by github commits. Amazon SNS
+	is used for integration with github.
+*/ 
+
 'use strict';
 
 const http = require( 'http' )
