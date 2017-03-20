@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "test-bot",
   "version": "0.0.1",
   "description": "nodejs test service",
   "main": "app/index.js",
