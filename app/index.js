@@ -48,8 +48,8 @@ function listen( session, port = '3000' ) {
     assert( pathParams.length != 0 );
 
     const repoName = pathParams[0]
-      , ref = pathParams.slice(1).join( '/' )
-      , sha = ref.length == 40 ? ref : '';
+      , ref = pathParams.slice(1, -1).join( '/' )
+      , sha = pathParams[pathParams.length - 1];//ref.length == 40 ? ref : '';
 
     session.createStatus( repoName, sha, 'pending' );
 

@@ -14,7 +14,7 @@ function pullRepo(url, ref = '') {
       if (err) throw err;
      
       git( ['init'] )
-      .then( git.bind( null, [ 'pull', url ] ) )
+      .then( git.bind( null, [ 'pull', url, 'refs/heads/dev' ] ) )
       .then( gitCheckout )
       .then( () => {
         resolve( new Repo( { path : tempDir, cleanup : cleanupCallback } ) );
