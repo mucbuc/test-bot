@@ -68,7 +68,7 @@ function listen( session, port = '3000' ) {
 
     function runTest() {
       return new Promise( (resolve, reject) => {
-        session.pullRemoteRepo( repoName, ref )
+        session.pullRemoteRepo( repoName, ref, sha )
         .then( repo => {
           
           NPM
