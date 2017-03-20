@@ -30,4 +30,5 @@
       content: `{"error": <no clue??>}`  
 
 * **sample call**  
-  `curl -L http://who.com/expector/master`
+  `curl -L http://who.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`
+  => `{"state":"success"}`
