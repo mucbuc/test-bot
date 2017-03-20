@@ -9,12 +9,12 @@
 	`GET`
 
 *  **URL params**   
-	*Required:*  
-	`repo=[string]`
+  *Required:*  
+  `repo=[string]`
   example: repo='test-bot'  
   `ref=[string]`
   example: ref='refs/heads/dev' 
-	`commit=[string]`  
+  `commit=[string]`  
   example: commit='edc2316e1bebf03e2ecc294780923a54566464b1'
 
 *  **success response**  

@@ -19,7 +19,7 @@ program
 if (!program.args.length)
 {
   console.log( "error: no configuration file specified" );
-  return
+  return;
 }
 
 fs.readFile( program.args[0], (err, data) => {
