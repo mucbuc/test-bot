@@ -6,7 +6,7 @@ const base = require( './base' )
   , tmp = require( 'tmp' )
   , Repo = require( './repo' );
 
-function pullRepo(url, ref, sha = '') {
+function pullRepo(url, ref = '', sha = '') {
 
   return new Promise( (resolve, reject) => {
     tmp.dir( { unsafeCleanup: true }, (err, tempDir, cleanupCallback) => {
