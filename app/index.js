@@ -8,9 +8,21 @@ const assert = require( 'assert' )
   , path = require( 'path' )
   , fs = require( 'fs' )
   , Session = require( './session' )
-  , NPM = require( './npm' );
+  , NPM = require( './npm' )
+  , program = require( 'commander' );
 
-fs.readFile( path.join( __dirname, '../config.json' ), (err, data) => {
+program
+.version('0.0.1')
+.usage( '<file>' )
+.parse( process.argv );
+
+if (!program.args.length)
+{
+  console.log( "error: no configuration file specified" );
+  return;
+}
+
+fs.readFile( program.args[0], (err, data) => {
 
   if (err) {
     console.log( 'error loading config file: ', err );
@@ -36,8 +48,8 @@ function listen( session, port = '3000' ) {
     assert( pathParams.length != 0 );
 
     const repoName = pathParams[0]
-      , ref = pathParams.slice(1).join( '/' )
-      , sha = ref.length == 40 ? ref : '';
+      , ref = pathParams.slice(1, -1).join( '/' )
+      , sha = pathParams[pathParams.length - 1];
 
     session.createStatus( repoName, sha, 'pending' );
 
@@ -56,7 +68,7 @@ function listen( session, port = '3000' ) {
 
     function runTest() {
       return new Promise( (resolve, reject) => {
-        session.pullRemoteRepo( repoName, ref )
+        session.pullRemoteRepo( repoName, ref, sha )
         .then( repo => {
           
           NPM

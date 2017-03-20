@@ -1,6 +1,6 @@
 {
   "name": "test-bot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "nodejs test service",
   "main": "app/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "tmp": "*",
-    "github": "*"
+    "github": "*",
+    "commander": "*"
   },
   "devDependencies": {
     "tape": "*"

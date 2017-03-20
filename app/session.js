@@ -19,14 +19,10 @@ class Session {
     }
   }
 
-  pullRemoteRepo(repoName, ref = '') {
+  pullRemoteRepo(repoName, ref, sha = '') {
     const tokenPart = this.token.length ? this.token + '@' : '';
     const url = 'https://' + tokenPart + 'github.com/' + path.join( this.owner, repoName ) + '.git';
-    
-
-    console.log( 'url:', url );
-
-    return GIT.pullRepo( url, ref );
+    return GIT.pullRepo( url, ref, sha );
   }
 
   createStatus(repo, sha, state) {

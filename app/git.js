@@ -6,7 +6,7 @@ const base = require( './base' )
   , tmp = require( 'tmp' )
   , Repo = require( './repo' );
 
-function pullRepo(url, ref = '') {
+function pullRepo(url, ref = '', sha = '') {
 
   return new Promise( (resolve, reject) => {
     tmp.dir( { unsafeCleanup: true }, (err, tempDir, cleanupCallback) => {
@@ -14,7 +14,7 @@ function pullRepo(url, ref = '') {
       if (err) throw err;
      
       git( ['init'] )
-      .then( git.bind( null, [ 'pull', url ] ) )
+      .then( git.bind( null, [ 'pull', url, ref ] ) )
       .then( gitCheckout )
       .then( () => {
         resolve( new Repo( { path : tempDir, cleanup : cleanupCallback } ) );
@@ -29,8 +29,8 @@ function pullRepo(url, ref = '') {
       }
 
       function gitCheckout() {
-        if (ref.length) {
-          return git( ['checkout', ref] );
+        if (sha.length) {
+          return git( ['checkout', sha] );
         }
         else return new Promise( resolve => {
           resolve();

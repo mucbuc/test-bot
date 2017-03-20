@@ -5,11 +5,11 @@
 const base = require( './base' );
 
 function installAndTest(repoPath, mute = false) {
-  return install(repoPath).then( spawn.bind( null, [ 'test' ], repoPath, mute ) );
+  return install(repoPath, mute).then( spawn.bind( null, [ 'test' ], repoPath, mute ) );
 }
 
-function install(repoPath) {
-  return spawn([ 'install' ], repoPath);
+function install(repoPath, mute = false) {
+  return spawn([ 'install' ], repoPath, mute);
 }
 
 function spawn(args, repoPath, mute = false) {
