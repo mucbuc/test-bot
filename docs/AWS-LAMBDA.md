@@ -1,12 +1,14 @@
-/* 
-	Example of aws-lambda kicking off unit tests triggered by github commits. Amazon SNS
-	is used for integration with github.
-*/ 
 
+# AWS-lambda example
+
+Example of aws-lambda kicking off unit tests triggered by github commits. Amazon SNS
+	is used for integration with github.
+
+```
 'use strict';
 
 const http = require( 'http' )
-  , ip = '12.16.128.15';
+  , ip = process.env.BOT_IP;
 
 exports.handler = (event, context, callback) => {
 
@@ -20,3 +22,4 @@ exports.handler = (event, context, callback) => {
         callback( null, 'failed:' + err );
     });
 };
+```
