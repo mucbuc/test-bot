@@ -4,8 +4,7 @@ const test = require( 'tape' )
   , Session = require( '../app/session' )
   , fs = require( 'fs' )
   , path = require( 'path' )
-  , NPM = require( '../app/npm' )
-  , GIT = require( '../app/git' );
+  , NPM = require( '../app/npm' );
 
 test( 'should fail to authenticate', (t) => {
 
@@ -69,30 +68,6 @@ test( 'should clone remote repo', (t) => {
 
     const testjs = path.join( repo.path, 'test', 'test.js' );
     fs.stat( testjs, (err, stats) => {
-      t.true( !err && stats.isFile(), "expected file at " + testjs );
-      t.end();
-    });
-  })
-  .catch( t.fail.bind( t ) );
-});
-
-
-test( 'should clone local repo', (t) => {
-
-  const logic = new Session();
-
-  GIT
-  .pullRepo( path.join( __dirname, '../' ) )
-  .then( repo => {
-
-    const testjs = path.join( repo.path, 'test', 'test.js' );
-    fs.stat( testjs, (err, stats) => {
-      
-      if (err) 
-      {
-        console.log( err );
-      }
-
       t.true( !err && stats.isFile(), "expected file at " + testjs );
       t.end();
     });
