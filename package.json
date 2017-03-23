@@ -4,7 +4,7 @@
   "description": "nodejs test service",
   "main": "app/index.js",
   "scripts": {
-    "test": "tape test/test.js"
+    "test": "tape test/*.js"
   },
   "author": "mark busenitz",
   "license": "MIT",

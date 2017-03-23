@@ -120,19 +120,6 @@ test( 'should fail to clone repo', (t) => {
 
 });
 
-test( 'should fail to checkout', (t) => {
-
-  const logic = new Session();
-
-  GIT
-  .pullRepo( path.join( __dirname, '../' ), 'nonsense' )
-  .then( t.fail.bind( t ) )
-  .catch( error => {
-    t.notEqual( error.indexOf( "did not match any file" ) );
-    t.end();
-  });
-});
-
 test( 'should reject on npm test failure', (t) => {
   NPM.installAndTest( path.join( __dirname, 'fail' ), true )
   .then( t.fail.bind( t ) )
@@ -142,7 +129,7 @@ test( 'should reject on npm test failure', (t) => {
   });
 });
 
-test( 'should reject on npm test failure', (t) => {
+test( 'should reject on npm install failure', (t) => {
   NPM.installAndTest( path.join( __dirname, 'fail_install' ), true )
   .then( t.fail.bind( t ) )
   .catch( err => {
