@@ -26,7 +26,7 @@ test( 'should clone local repo', (t) => {
   .pullRepo( path.join( __dirname, '../' ) )
   .then( repo => {
 
-    const testjs = path.join( repo.path, 'test', 'test.js' );
+    const testjs = path.join( repo.path, 'test', 'git.js' );
     fs.stat( testjs, (err, stats) => {
       
       if (err) 
