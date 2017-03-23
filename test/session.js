@@ -5,9 +5,9 @@ const test = require( 'tape' )
 
 test( 'should fail to authenticate', (t) => {
 
-  const logic = new Session( { owner: 'asfdas', token:'blaablaa:blabla' } );
+  const session = new Session( { owner: 'asfdas', token:'blaablaa:blabla' } );
   
-  logic
+  session
   .pullRemoteRepo( 'dadffaj' )
   .then( t.fail.bind( t ) )
   .catch( error => {
@@ -17,9 +17,9 @@ test( 'should fail to authenticate', (t) => {
 });
 
 test( 'should cleanup tmp directory', (t) => {
-  const logic = new Session( {owner: 'mucbuc'} );
+  const session = new Session( {owner: 'mucbuc'} );
 
-  logic
+  session
   .pullRemoteRepo( 'expector' )
   .then( repo => { 
 
@@ -37,9 +37,9 @@ test( 'should cleanup tmp directory', (t) => {
 
 test( 'should clone remote repo', (t) => {
  
-  const logic = new Session( {owner: 'mucbuc'} );
+  const session = new Session( {owner: 'mucbuc'} );
   
-  logic
+  session
   .pullRemoteRepo( 'expector' )
   .then( repo => {
 
@@ -55,9 +55,9 @@ test( 'should clone remote repo', (t) => {
 test( 'should fail to clone repo', (t) => {
   try {
     const config = require( './config.json' )
-    const logic = new Session( config );
+    const session = new Session( config );
     
-    logic
+    session
     .pullRemoteRepo( 'wewfeqioewiurwe' )
     .then( t.fail.bind( t ) )
     .catch( error => {
