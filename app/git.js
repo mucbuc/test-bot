@@ -22,9 +22,6 @@ function pullRepo(url, ref = '', sha = '') {
       .catch( reject );    
       
       function git(args) {
-          
-        console.log( 'git', args );
-
         return base.spawn( 'git', args, { cwd: tempDir } );
       }
 

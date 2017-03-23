@@ -18,14 +18,14 @@ program
 
 if (!program.args.length)
 {
-  console.log( "error: no configuration file specified" );
+  console.error( "error: no configuration file specified" );
   return;
 }
 
 fs.readFile( program.args[0], (err, data) => {
 
   if (err) {
-    console.log( 'error loading config file: ', err );
+    console.error( 'error loading config file: ', err );
     return;
   }
 
@@ -61,7 +61,7 @@ function listen( session, port = '3000' ) {
       res.end( JSON.stringify(testResult) );
     })
     .catch( err => {
-      console.log( err );
+      console.error( err );
       res.writeHead( 500 );
       res.end( JSON.stringify( {error: err} ) );
     });
