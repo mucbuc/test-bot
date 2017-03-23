@@ -1,10 +1,7 @@
-#!/usr/bin/env node
-
 const test = require( 'tape' )
   , Session = require( '../app/session' )
   , fs = require( 'fs' )
-  , path = require( 'path' )
-  , NPM = require( '../app/npm' );
+  , path = require( 'path' );
 
 test( 'should fail to authenticate', (t) => {
 
@@ -75,20 +72,3 @@ test( 'should fail to clone repo', (t) => {
 
 });
 
-test( 'should reject on npm test failure', (t) => {
-  NPM.installAndTest( path.join( __dirname, 'fail' ), true )
-  .then( t.fail.bind( t ) )
-  .catch( err => {
-    t.notEqual( err.indexOf( 'Test failed' ), -1 );
-    t.end();
-  });
-});
-
-test( 'should reject on npm install failure', (t) => {
-  NPM.installAndTest( path.join( __dirname, 'fail_install' ), true )
-  .then( t.fail.bind( t ) )
-  .catch( err => {
-    t.notEqual( err.indexOf( 'not in the npm registry' ), -1 );
-    t.end();
-  });
-});
