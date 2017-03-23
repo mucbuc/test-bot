@@ -37,26 +37,6 @@ test( 'should cleanup tmp directory', (t) => {
   .catch( t.fail.bind( t ) ); 
 });
 
-test( 'should install tape', (t) => {
-  const logic = new Session( {owner: 'mucbuc'} );
-
-  logic
-  .pullRemoteRepo( 'expector' )
-  .then( repo => {
-    NPM
-    .install(repo.path)
-    .then( () => {
-      const pathTmp = path.join( repo.path, 'node_modules', 'tape' );
-      fs.stat( pathTmp, (err, stats) => {
-        t.true( !err && stats.isDirectory(), "expected directory at " + pathTmp );
-        t.end();
-      });
-    }).catch( t.fail.bind( t ) );
-  })
-  .catch( t.fail.bind( t ) );
-
-
-});
 
 test( 'should clone remote repo', (t) => {
  
