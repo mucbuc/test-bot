@@ -8,7 +8,6 @@ const assert = require( 'assert' )
   , path = require( 'path' )
   , fs = require( 'fs' )
   , Session = require( './session' )
-  , NPM = require( './npm' )
   , program = require( 'commander' );
 
 program
@@ -53,41 +52,28 @@ function listen( session, port = '3000' ) {
 
     session.createStatus( repoName, sha, 'pending' );
 
-    runTest()
-    .then( testResult => {
-      session.createStatus( repoName, sha, testResult.state );
-      res.writeHead( testResult.code );
-      delete testResult.code;
-      res.end( JSON.stringify(testResult) );
+    session
+    .pullRemoteRepo( repoName, ref, sha )
+    .then( repo => {
+      
+      repo
+      .runTest()
+      .then( testResult => {
+        session.createStatus( repoName, sha, testResult.state );
+        res.writeHead( testResult.code );
+        delete testResult.code;
+        res.end( JSON.stringify(testResult) );
+      })
+      .catch( err => {
+        console.error( err );
+        res.writeHead( 500 );
+        res.end( JSON.stringify( {error: err} ) );
+      });
     })
     .catch( err => {
-      console.error( err );
-      res.writeHead( 500 );
-      res.end( JSON.stringify( {error: err} ) );
+      resolve( { error: err, code: 404 } );
     });
 
-    function runTest() {
-      return new Promise( (resolve, reject) => {
-        session.pullRemoteRepo( repoName, ref, sha )
-        .then( repo => {
-          
-          NPM
-          .installAndTest(repo.path)
-          .then( onTestFinished.bind( null, { state: 'success', code: 200 } ) )
-          .catch( err => {
-            onTestFinished( { state: 'failure', error: err, code: 201 } );
-          });
-          
-          function onTestFinished( testResult ) {
-            repo.cleanup(); 
-            resolve( testResult );
-          }
-        })
-        .catch( err => {
-          resolve( { error: err, code: 404 } );
-        });
-      });
-    }
   })
   .listen( port, () => {
     console.log( 'test-bot listening on port', port );
