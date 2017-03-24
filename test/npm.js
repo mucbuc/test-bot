@@ -1,27 +1,30 @@
 
 const test = require( 'tape' )
   , NPM = require( '../app/npm' )
-  , Session = require( '../app/session' )
   , path = require( 'path' )
-  , fs = require( 'fs' );
+  , fs = require( 'fs' )
+  , tmp = require( 'tmp' );
 
 test( 'should install tape', (t) => {
-  const logic = new Session( {owner: 'mucbuc'} );
 
-  logic
-  .pullRemoteRepo( 'expector' )
-  .then( repo => {
+  tmp.dir( { unsafeCleanup: true }, (err, tempDir) => {
+
+    const content = JSON.stringify( { dependencies: { "tape": "*" } } );
+    fs.writeFileSync( path.join( tempDir, 'package.json' ), content );
+
     NPM
-    .install(repo.path)
+    .install( tempDir )
     .then( () => {
-      const pathTmp = path.join( repo.path, 'node_modules', 'tape' );
-      fs.stat( pathTmp, (err, stats) => {
-        t.true( !err && stats.isDirectory(), "expected directory at " + pathTmp );
+      
+      const pathTape = path.join( tempDir, 'node_modules', 'tape' );
+      fs.stat( pathTape, (err, stats) => {
+        t.true( !err && stats.isDirectory(), "expected directory at " + pathTape );
         t.end();
       });
+    
     }).catch( t.fail.bind( t ) );
-  })
-  .catch( t.fail.bind( t ) );
+  });
+
 });
 
 test( 'should reject on npm test failure', (t) => {

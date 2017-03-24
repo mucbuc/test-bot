@@ -57,37 +57,37 @@ function listen( session, port = '3000' ) {
     GIT.pullRepo( session.makeURLForRemote( repoName ), ref, sha )
     .then( repo => {
 
-      NPM
-      .installAndTest(repo.path)
-      .then( () => {
+      NPM.installAndTest(repo.path)
+      .then( success )
+      .catch( err => {
+        fail( 500, err );
+
+        repo.cleanup();
+      });
+
+      function success() {
         const state = 'success';
         session.createStatus( repoName, sha, state );
 
         res.writeHead( 200 );
-        res.end( JSON.stringify( { state: state } ) );
+        res.end( { state: state } );
       
         repo.cleanup();
-      } )
-      .catch( err => {
-        console.error( err );
-        
-        const state = 'failure';
-        session.createStatus( repoName, sha, state );
-
-        result[error] = err;
-        res.writeHead( 500 );
-        res.end( JSON.stringify( { state: state } ) );
-
-        repo.cleanup();
-      });
+      }
     })
     .catch( err => {
-      console.error( err );
-      
-      res.writeHead( 404 ); 
-      res.end( { error: err } );
+      fail( 404, err );
     });
 
+    function fail( code, error ) {
+      console.error( error );
+
+      const state = 'failure';
+      session.createStatus( repoName, sha, state );
+
+      res.writeHead( code ); 
+      res.end( { state: state, error: error } );
+    }
   })
   .listen( port, () => {
     console.log( 'test-bot listening on port', port );
