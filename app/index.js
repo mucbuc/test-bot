@@ -8,7 +8,8 @@ const assert = require( 'assert' )
   , path = require( 'path' )
   , fs = require( 'fs' )
   , Session = require( './session' )
-  , program = require( 'commander' );
+  , program = require( 'commander' )
+  , NPM = require( './npm' );
 
 program
 .version('0.0.1')
@@ -55,19 +56,23 @@ function listen( session, port = '3000' ) {
     session
     .pullRemoteRepo( repoName, ref, sha )
     .then( repo => {
+
+      NPM
+      .installAndTest(repo.path)
+      .then( () => {
+        const result = { state: 'success' };
+        session.createStatus( repoName, sha, result );
+        res.writeHead( 200 );
+        res.end( JSON.stringify( result ) );
       
-      repo
-      .runTest()
-      .then( testResult => {
-        session.createStatus( repoName, sha, testResult.state );
-        res.writeHead( testResult.code );
-        delete testResult.code;
-        res.end( JSON.stringify(testResult) );
-      })
-      .catch( err => {
+        repo.cleanup();
+      } )
+      .catch( (err) => {
         console.error( err );
         res.writeHead( 500 );
-        res.end( JSON.stringify( {error: err} ) );
+        res.end( JSON.stringify( { state: 'failure', error: err } ) );
+
+        repo.cleanup();
       });
     })
     .catch( err => {
