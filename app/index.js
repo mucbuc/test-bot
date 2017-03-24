@@ -9,6 +9,7 @@ const assert = require( 'assert' )
   , fs = require( 'fs' )
   , Session = require( './session' )
   , program = require( 'commander' )
+  , GIT = require( './git' )
   , NPM = require( './npm' );
 
 program
@@ -53,30 +54,38 @@ function listen( session, port = '3000' ) {
 
     session.createStatus( repoName, sha, 'pending' );
 
-    session
-    .pullRemoteRepo( repoName, ref, sha )
+    GIT.pullRepo( session.makeURLForRemote( repoName ), ref, sha )
     .then( repo => {
 
       NPM
       .installAndTest(repo.path)
       .then( () => {
-        const result = { state: 'success' };
-        session.createStatus( repoName, sha, result );
+        const state = 'success';
+        session.createStatus( repoName, sha, state );
+
         res.writeHead( 200 );
-        res.end( JSON.stringify( result ) );
+        res.end( JSON.stringify( { state: state } ) );
       
         repo.cleanup();
       } )
-      .catch( (err) => {
+      .catch( err => {
         console.error( err );
+        
+        const state = 'failure';
+        session.createStatus( repoName, sha, state );
+
+        result[error] = err;
         res.writeHead( 500 );
-        res.end( JSON.stringify( { state: 'failure', error: err } ) );
+        res.end( JSON.stringify( { state: state } ) );
 
         repo.cleanup();
       });
     })
     .catch( err => {
-      resolve( { error: err, code: 404 } );
+      console.error( err );
+      
+      res.writeHead( 404 ); 
+      res.end( { error: err } );
     });
 
   })
