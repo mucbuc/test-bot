@@ -58,22 +58,14 @@ function listen( session, port = '3000' ) {
     .then( repo => {
 
       NPM.installAndTest(repo.path)
-      .then( success )
+      .then( () => {
+        success();
+        repo.cleanup();
+      })
       .catch( err => {
         fail( 500, err );
-
         repo.cleanup();
       });
-
-      function success() {
-        const state = 'success';
-        session.createStatus( repoName, sha, state );
-
-        res.writeHead( 200 );
-        res.end( { state: state } );
-      
-        repo.cleanup();
-      }
     })
     .catch( err => {
       fail( 404, err );
@@ -88,6 +80,15 @@ function listen( session, port = '3000' ) {
       res.writeHead( code ); 
       res.end( { state: state, error: error } );
     }
+
+    function success() {
+      const state = 'success';
+      session.createStatus( repoName, sha, state );
+
+      res.writeHead( 200 );
+      res.end( { state: state } );
+    }
+
   })
   .listen( port, () => {
     console.log( 'test-bot listening on port', port );
