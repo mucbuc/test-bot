@@ -78,7 +78,7 @@ function listen( session, port = '3000' ) {
       session.createStatus( repoName, sha, state );
 
       res.writeHead( code ); 
-      res.end( { state: state, error: error } );
+      res.end( JSON.stringify( { state: state, error: error } ) );
     }
 
     function success() {
@@ -86,7 +86,7 @@ function listen( session, port = '3000' ) {
       session.createStatus( repoName, sha, state );
 
       res.writeHead( 200 );
-      res.end( { state: state } );
+      res.end( JSON.stringify( { state: state } ) );
     }
 
   })
