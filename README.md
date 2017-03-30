@@ -18,7 +18,7 @@ nodejs test service
 
 * **[API](./docs/API.md)**
 
-* **[aws-lambda integration example](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1.js)**
+* **[aws-lambda integration example](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1)**
 
 * **test** `npm test` For testing the full suite a valid `config.json` needs to be placed inside the `test/` directory.
 
