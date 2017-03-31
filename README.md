@@ -12,7 +12,7 @@ When changing code it is convenient to have a server run automation tests. It is
 
 
 ## Usage
-* install on the server
+* install on the server  
 `npm install test-bot -g`  
 * create configuration json file
 ```
@@ -22,11 +22,12 @@ When changing code it is convenient to have a server run automation tests. It is
 	"port": "80" //port number for the service, defaults to 3000
 }
 ```  
-* run **test-bot**`test-bot config.json`
+* run **test-bot**  
+`test-bot config.json`
 
-* run unit tests
- After pushing commits you can have the server run the tests by curling  
-`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an aws lambda function. This function then invokes **test-bot**. 
+* run unit tests  
+ After pushing commits you can have the server run the tests  
+`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an aws lambda function. This function then calls the **test-bot** service. 
 
 
 ## test 
