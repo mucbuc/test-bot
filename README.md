@@ -16,7 +16,7 @@ nodejs test service
 }
 ```
 
-* **[API](./docs/API.md)**
+* **[API](./API.md)**
 
 * **[aws-lambda integration example](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1)**
 
