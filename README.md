@@ -21,13 +21,15 @@ When changing code it is convenient to have a server run automation tests. It is
 	"owner": "joey", //github user name
 	"port": "80" //port number for the service, defaults to 3000
 }
-```  
+```
+The [OAuth token](https://help.github.com/articles/git-automation-with-oauth-tokens/) is required for accessing private repos.
+
 * run **test-bot**  
 `test-bot config.json`
 
 * run unit tests  
  After pushing commits you can have the server run the tests  
-`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an aws lambda function. This function then calls the **test-bot** service. 
+`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an [aws lambda](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1) function. This function then calls the **test-bot** service. 
 
 
 ## test 
