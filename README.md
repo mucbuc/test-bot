@@ -29,7 +29,7 @@ The [OAuth token](https://help.github.com/articles/git-automation-with-oauth-tok
 
 * run unit tests  
  After pushing commits you can have the server run the tests  
-`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an [aws lambda](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1) function. This function then calls the **test-bot** service. 
+`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an [aws lambda](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1) function that calls the **test-bot** service automaticaly for each commit. 
 
 
 ## test 
