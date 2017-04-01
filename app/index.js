@@ -7,7 +7,7 @@ const assert = require( 'assert' )
   , url = require( 'url' )
   , path = require( 'path' )
   , fs = require( 'fs' )
-  , Session = require( './session' )
+  , SessionFactory = require( './session' )
   , program = require( 'commander' )
   , GIT = require( './git' )
   , NPM = require( './npm' );
@@ -31,7 +31,7 @@ fs.readFile( program.args[0], (err, data) => {
   }
 
   const config = JSON.parse( data );
-  listen( new Session( config ), config.port);
+  listen( SessionFactory.createSession( config ), config.port);
 });
 
 function listen( session, port = '3000' ) {

@@ -1,13 +1,25 @@
 
 const test = require( 'tape' )
   , GIT = require( '../app/git' )
-  , Session = require( '../app/session' )
+  , SessionFactory = require( '../app/session' )
   , path = require( 'path' )
   , fs = require( 'fs' );
 
+class SessionFactoryTestValid {
+  static createSession() {
+    return SessionFactory.createSession( {owner: 'mucbuc'} ); 
+  }
+};
+
+class SessionFactoryTestInvalid {
+  static createSession() {
+    return SessionFactory.createSession( { owner: 'asfdas', token:'blaablaa:blabla' } ); 
+  }
+};
+
 test( 'should fail to checkout', (t) => {
 
-  const logic = new Session();
+  const logic = SessionFactory.createSession();
 
   GIT
   .pullRepo( path.join( __dirname, '../' ), 'nonsense' )
@@ -20,7 +32,7 @@ test( 'should fail to checkout', (t) => {
 
 test( 'should clone local repo', (t) => {
 
-  const logic = new Session();
+  const logic = SessionFactory.createSession();
 
   GIT
   .pullRepo( path.join( __dirname, '../' ) )
@@ -43,7 +55,7 @@ test( 'should clone local repo', (t) => {
 
 test( 'should fail to authenticate', (t) => {
 
-  const session = new Session( { owner: 'asfdas', token:'blaablaa:blabla' } );
+  const session = SessionFactoryTestInvalid.createSession();
   
   GIT
   .pullRepo( session.makeURLForRemote( 'dadffaj' ) )
@@ -55,7 +67,7 @@ test( 'should fail to authenticate', (t) => {
 });
 
 test( 'should cleanup tmp directory', (t) => {
-  const session = new Session( {owner: 'mucbuc'} );
+  const session = SessionFactoryTestValid.createSession();
 
   GIT
   .pullRepo( session.makeURLForRemote( 'expector' ) )
@@ -74,7 +86,7 @@ test( 'should cleanup tmp directory', (t) => {
 
 test( 'should clone remote repo', (t) => {
  
-  const session = new Session( {owner: 'mucbuc'} );
+  const session = SessionFactoryTestValid.createSession();
   
   GIT
   .pullRepo( session.makeURLForRemote( 'expector' ) )
@@ -91,11 +103,11 @@ test( 'should clone remote repo', (t) => {
 
 test( 'should fail to clone repo', (t) => {
   try {
-    const config = require( './config.json' )
-    const session = new Session( config );
+    const session = SessionFactory.createSession( require( './config.json' ) )
+      , bogusURL = 'wewfeqioewiurwe'; 
     
     GIT
-    .pullRepo( session.makeURLForRemote( 'wewfeqioewiurwe' ) )
+    .pullRepo( session.makeURLForRemote( bogusURL ) )
     .then( t.fail.bind( t ) )
     .catch( error => {
       t.notEqual( error.indexOf( 'not found' ), -1 );

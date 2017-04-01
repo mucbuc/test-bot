@@ -28,6 +28,12 @@ class Session {
       this.gh.createStatus( { owner: this.owner, repo: repo, sha: sha, state: state } );
     }
   }
-}
+};
 
-module.exports = Session;
+class SessionFactory {
+  static createSession(bla) {
+    return new Session(bla);
+  }
+};
+
+module.exports = SessionFactory;
