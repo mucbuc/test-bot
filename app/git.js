@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * Collection of methods around git functionality.
+ *
+ * @summary   git functionality.
+ *
+ * @requires tmp
+ */
+
 'use strict';
 
 const base = require( './base' )

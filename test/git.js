@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 const test = require( 'tape' )
   , GIT = require( '../app/git' )
@@ -7,7 +8,7 @@ const test = require( 'tape' )
 
 class SessionFactoryTestValid {
   static createSession() {
-    return SessionFactory.createSession( {owner: 'mucbuc'} ); 
+    return SessionFactory.createSession( { owner: 'mucbuc' } ); 
   }
 };
 
@@ -63,6 +64,7 @@ test( 'should fail to authenticate', (t) => {
 });
 
 test( 'should cleanup tmp directory', (t) => {
+  
   const session = SessionFactoryTestValid.createSession();
 
   GIT
@@ -99,7 +101,9 @@ test( 'should clone remote repo', (t) => {
 
 test( 'should fail to clone repo', (t) => {
   try {
-    const session = SessionFactory.createSession( require( './config.json' ) )
+    
+    const config = require( './config.json' )
+      , session = SessionFactory.createSession( config )
       , bogusURL = 'wewfeqioewiurwe'; 
     
     GIT
