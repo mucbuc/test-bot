@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * github status API wrapper
+ *
+ * @summary github status updater
+ *
+ * @requires github
+ */
+
 "user strict"; 
 
 const GH = require( 'github' );

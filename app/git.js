@@ -11,8 +11,7 @@
 'use strict';
 
 const base = require( './base' )
-  , tmp = require( 'tmp' )
-  , Repo = require( './repo' );
+  , tmp = require( 'tmp' );
 
 function pullRepo(url, ref = '', sha = '') {
 
@@ -25,7 +24,7 @@ function pullRepo(url, ref = '', sha = '') {
       .then( git.bind( null, [ 'pull', url, ref ] ) )
       .then( gitCheckout )
       .then( () => {
-        resolve( new Repo( { path : tempDir, cleanup : cleanupCallback } ) );
+        resolve( { path : tempDir, cleanup : cleanupCallback } );
       })
       .catch( reject );    
       

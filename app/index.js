@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * parse program args, read config file and create server 
+ *
+ * @summary http server entry point
+ *
+ * @requires commander
+ */
+
 "use strict";
 
 const assert = require( 'assert' )

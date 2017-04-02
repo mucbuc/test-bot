@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 
+/**
+ * Commonly used methods shared with other files.
+ *
+ * @summary common methods
+ *
+ */
+
 'use strict';
 
 const cp = require( 'child_process' );

@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/**
+ * Encapsulates github credentials and github status api.  
+ *
+ * @summary 
+ */
+
 "use strict";
 
 const assert = require( 'assert' )
