@@ -19,8 +19,6 @@ class SessionFactoryTestInvalid {
 
 test( 'should fail to checkout', (t) => {
 
-  const logic = SessionFactory.createSession();
-
   GIT
   .pullRepo( path.join( __dirname, '../' ), 'nonsense' )
   .then( t.fail.bind( t ) )
@@ -31,8 +29,6 @@ test( 'should fail to checkout', (t) => {
 });
 
 test( 'should clone local repo', (t) => {
-
-  const logic = SessionFactory.createSession();
 
   GIT
   .pullRepo( path.join( __dirname, '../' ) )
