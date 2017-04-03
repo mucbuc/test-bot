@@ -10,7 +10,7 @@ const cp = require( 'child_process' )
 function launchServer() {
   let server = cp.fork( 
     getRelativePath('../app/index'), 
-    [ getRelativePath( './config.json' ) ] 
+    [ getRelativePath( './blackbox_config.json' ) ] 
   );
 
   process.on( 'exit', () => {
