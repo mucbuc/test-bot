@@ -10,7 +10,7 @@ const cp = require( 'child_process' )
 function launchServer() {
   let server = cp.fork( 
     getRelativePath('../app/index'), 
-    [ getRelativePath( './blackbox_config.json' ) ] 
+    [ getRelativePath( './smoke.json' ) ] 
   );
 
   process.on( 'exit', () => {
@@ -25,7 +25,7 @@ let server = launchServer();
 test( 'success route without token', (t) => {
 
   setTimeout( () => {
-    const url = 'http://localhost:3000/expector/refs/heads/master/04645fa635f23cb484f75e182f5430edb6d0cd16';
+    const url = 'http://localhost:3000/pass/refs/heads/master/199ef929c24965a176126aed951110ec85dec3b6';
     http.get( url, (result) => {
       result.on( 'data', (chunk) => {
         const response = JSON.parse(chunk.toString());

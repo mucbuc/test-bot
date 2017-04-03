@@ -3,7 +3,7 @@
 * **[Overview](./README.md)**
 
 *  **URL**  
-  `/:repoName/:branch|commit`
+  `/:repoName/:ref/:commit`
 
 *  **method**    
 	`GET`
