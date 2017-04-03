@@ -1,6 +1,6 @@
 {
   "name": "test-bot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "nodejs test service",
   "main": "app/index.js",
   "scripts": {
@@ -19,7 +19,8 @@
   },
   "keywords": [
     "test-automation",
-    "continuous-integration"
+    "continuous-integration",
+    "test-driven development"
   ],
   "bin": "./app/index.js",
   "preferGlobal": "true",
