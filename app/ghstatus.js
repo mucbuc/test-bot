@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * github status API wrapper
+ *
+ * @summary github status updater
+ *
+ * @requires github
+ */
+
 "user strict"; 
 
 const GH = require( 'github' );
@@ -14,7 +22,7 @@ class GHStatusAPI {
   createStatus(context) { 
     this.github.repos.createStatus( context, (err, res) => {
       if (err) {
-        console.log( 'github api: error:', err );  
+        console.error( 'github api: error:', err );  
       }
     });
   }

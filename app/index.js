@@ -1,5 +1,13 @@
 #!/usr/bin/env node
 
+/**
+ * parse program args, read config file and create server 
+ *
+ * @summary http server entry point
+ *
+ * @requires commander
+ */
+
 "use strict";
 
 const assert = require( 'assert' )
@@ -7,9 +15,10 @@ const assert = require( 'assert' )
   , url = require( 'url' )
   , path = require( 'path' )
   , fs = require( 'fs' )
-  , Session = require( './session' )
-  , NPM = require( './npm' )
-  , program = require( 'commander' );
+  , SessionFactory = require( './session' )
+  , program = require( 'commander' )
+  , GIT = require( './git' )
+  , NPM = require( './npm' );
 
 program
 .version('0.0.1')
@@ -18,19 +27,19 @@ program
 
 if (!program.args.length)
 {
-  console.log( "error: no configuration file specified" );
+  console.error( "error: no configuration file specified" );
   return;
 }
 
 fs.readFile( program.args[0], (err, data) => {
 
   if (err) {
-    console.log( 'error loading config file: ', err );
+    console.error( 'error loading config file: ', err );
     return;
   }
 
   const config = JSON.parse( data );
-  listen( new Session( config ), config.port);
+  listen( SessionFactory.createSession( config ), config.port);
 });
 
 function listen( session, port = '3000' ) {
@@ -53,41 +62,41 @@ function listen( session, port = '3000' ) {
 
     session.createStatus( repoName, sha, 'pending' );
 
-    runTest()
-    .then( testResult => {
-      session.createStatus( repoName, sha, testResult.state );
-      res.writeHead( testResult.code );
-      delete testResult.code;
-      res.end( JSON.stringify(testResult) );
+    GIT.pullRepo( session.makeURLForRemote( repoName ), ref, sha )
+    .then( repo => {
+
+      NPM.installAndTest(repo.path)
+      .then( () => {
+        success();
+        repo.cleanup();
+      })
+      .catch( err => {
+        fail( 500, err );
+        repo.cleanup();
+      });
     })
     .catch( err => {
-      console.log( err );
-      res.writeHead( 500 );
-      res.end( JSON.stringify( {error: err} ) );
+      fail( 404, err );
     });
 
-    function runTest() {
-      return new Promise( (resolve, reject) => {
-        session.pullRemoteRepo( repoName, ref, sha )
-        .then( repo => {
-          
-          NPM
-          .installAndTest(repo.path)
-          .then( onTestFinished.bind( null, { state: 'success', code: 200 } ) )
-          .catch( err => {
-            onTestFinished( { state: 'failure', error: err, code: 201 } );
-          });
-          
-          function onTestFinished( testResult ) {
-            repo.cleanup(); 
-            resolve( testResult );
-          }
-        })
-        .catch( err => {
-          resolve( { error: err, code: 404 } );
-        });
-      });
+    function fail( code, error ) {
+      console.error( error );
+
+      const state = 'failure';
+      session.createStatus( repoName, sha, state );
+
+      res.writeHead( code ); 
+      res.end( JSON.stringify( { state, error } ) );
     }
+
+    function success() {
+      const state = 'success';
+      session.createStatus( repoName, sha, state );
+
+      res.writeHead( 200 );
+      res.end( JSON.stringify( { state } ) );
+    }
+
   })
   .listen( port, () => {
     console.log( 'test-bot listening on port', port );

@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
+/**
+ * Encapsulates github credentials and github status api.  
+ *
+ * @summary 
+ */
+
 "use strict";
 
 const assert = require( 'assert' )
   , fs = require( 'fs' )
   , path = require( 'path' )
-  , GIT = require( './git' )
   , GHStatusAPI = require( './ghstatus' );
 
 class Session {
@@ -19,17 +24,22 @@ class Session {
     }
   }
 
-  pullRemoteRepo(repoName, ref, sha = '') {
+  makeURLForRemote(repoName) {
     const tokenPart = this.token.length ? this.token + '@' : '';
-    const url = 'https://' + tokenPart + 'github.com/' + path.join( this.owner, repoName ) + '.git';
-    return GIT.pullRepo( url, ref, sha );
+    return 'https://' + tokenPart + 'github.com/' + path.join( this.owner, repoName ) + '.git';
   }
 
   createStatus(repo, sha, state) {
-    if (sha.length) {
+    if (this.gh && sha.length) {
       this.gh.createStatus( { owner: this.owner, repo: repo, sha: sha, state: state } );
     }
   }
-}
+};
 
-module.exports = Session;
+class SessionFactory {
+  static createSession(bla) {
+    return new Session(bla);
+  }
+};
+
+module.exports = SessionFactory;

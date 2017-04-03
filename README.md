@@ -1,13 +1,20 @@
 # test-bot  
-nodejs test service
+is a node module for running tests on node modules 
 
-**test-bot** fetches source code and runs `npm install` and `npm test`. The targeted repository and commit sha is specified in the request URL. The github credentials are configured on the server side, using [OAuth token](https://help.github.com/articles/git-automation-with-oauth-tokens/) authorization for accessing private repos. 
+## What problem it solves
 
-* **install** `npm install test-bot -g`  
+When changing code it is convenient to have a server run automation tests. It is less convenient to embark on a quest to comprehend one of the existing automation servers just to 
+* `git` the source
+* run `npm install`  
+* run `npm test`  
 
-* **run** `test-bot config.json`  
+**test-bot** has you covered 
 
-* **config.json**  
+
+## Usage
+* install on the server  
+`npm install test-bot -g`  
+* create configuration json file
 ```
 {
 	"token": "21e22f14292c0577acd51a697d97fac29da153a3", //personal access token
@@ -15,13 +22,21 @@ nodejs test service
 	"port": "80" //port number for the service, defaults to 3000
 }
 ```
+The [OAuth token](https://help.github.com/articles/git-automation-with-oauth-tokens/) is required for accessing private repos.
 
-* **[API](./API.md)**
+* run **test-bot**  
+`test-bot config.json`
 
-* **[aws-lambda integration example](./aws-lambda.js)**
+* run unit tests  
+ After pushing commits you can have the server run the tests  
+`curl -L http://myaddress.com/test-bot/refs/heads/master/42d26c814362872e9d13c393cf9ef76ceacd74ea`, or more conveniently, hookup a github integration service which invokes an [aws lambda](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1) function that calls the **test-bot** service automaticaly for each commit. 
 
-* **test** `npm test` For testing the full suite a valid `config.json` needs to be placed inside the `test/` directory.
+
+## test 
+`npm test` For testing the full suite a valid `config.json` needs to be placed inside the `test/` directory.
+
+## [API](./API.md)
+
+## [aws-lambda integration example](https://gist.github.com/mucbuc/3fabfb103ef96cbf468d06e0b2e227b1)
 
 Please create pull requests for features and issues for bugs or questions. 
-
-wtf

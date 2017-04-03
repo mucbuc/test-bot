@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/**
+ * Collection of methods around npm  
+ *
+ * @summary npm functionality 
+ */
+
 'use strict';
 
 const base = require( './base' );

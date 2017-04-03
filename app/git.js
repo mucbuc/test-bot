@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 
+/**
+ * Collection of methods around git functionality.
+ *
+ * @summary   git functionality.
+ *
+ * @requires tmp
+ */
+
 'use strict';
 
 const base = require( './base' )
-  , tmp = require( 'tmp' )
-  , Repo = require( './repo' );
+  , tmp = require( 'tmp' );
 
 function pullRepo(url, ref = '', sha = '') {
 
@@ -17,14 +24,11 @@ function pullRepo(url, ref = '', sha = '') {
       .then( git.bind( null, [ 'pull', url, ref ] ) )
       .then( gitCheckout )
       .then( () => {
-        resolve( new Repo( { path : tempDir, cleanup : cleanupCallback } ) );
+        resolve( { path : tempDir, cleanup : cleanupCallback } );
       })
       .catch( reject );    
       
       function git(args) {
-          
-        console.log( 'git', args );
-
         return base.spawn( 'git', args, { cwd: tempDir } );
       }
 
