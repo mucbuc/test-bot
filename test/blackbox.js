@@ -16,26 +16,28 @@ function launchServer() {
   process.on( 'exit', () => {
     server.kill();
   });
+
+  return server;
 }
 
-launchServer();
+let server = launchServer();
 
 test( 'success route', (t) => {
 
   setTimeout( () => {
-
-    http.get( 'http://localhost:3000/expector/refs/heads/master/04645fa635f23cb484f75e182f5430edb6d0cd16', (result) => {
+    const url = 'http://localhost:3000/expector/refs/heads/master/04645fa635f23cb484f75e182f5430edb6d0cd16';
+    http.get( url, (result) => {
       result.on( 'data', (chunk) => {
         const response = JSON.parse(chunk.toString());
         
         t.true( response.hasOwnProperty( 'state' ) );
         t.equal( response.state, 'success' );
         t.end();
-        process.exit( 0 );
+        server.kill();
       });
     })
     .on( 'error', (err) => {
-      process.exit( 1 );
+      server.kill();
     });
   }, 1000 );
 });
