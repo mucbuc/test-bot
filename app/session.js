@@ -30,7 +30,7 @@ class Session {
   }
 
   createStatus(repo, sha, state) {
-    if (sha.length) {
+    if (this.gh && sha.length) {
       this.gh.createStatus( { owner: this.owner, repo: repo, sha: sha, state: state } );
     }
   }
