@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 const test = require( 'tape' )
   , NPM = require( '../app/npm' )

@@ -14,9 +14,13 @@
     "commander": "*"
   },
   "devDependencies": {
+    "supertest": "^3.0.0",
     "tape": "*"
   },
-  "keywords": [ "test-automation", "continuous-integration" ],
+  "keywords": [
+    "test-automation",
+    "continuous-integration"
+  ],
   "bin": "./app/index.js",
   "preferGlobal": "true",
   "repository": {
