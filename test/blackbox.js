@@ -22,7 +22,7 @@ function launchServer() {
 
 let server = launchServer();
 
-test( 'success route', (t) => {
+test( 'success route without token', (t) => {
 
   setTimeout( () => {
     const url = 'http://localhost:3000/expector/refs/heads/master/04645fa635f23cb484f75e182f5430edb6d0cd16';
